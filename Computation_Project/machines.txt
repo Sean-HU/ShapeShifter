@@ -1,0 +1,17 @@
+Q: s1, s2, c1, c2
+E: a,b,c
+s: s1
+F: c2
+d:
+s1, a, c2
+s1, b, c1
+s1, c, s2
+s2, a, c1
+s2, b, s1
+s2, c, c2
+c1, a, s1
+c1, b, s2
+c1, c, c2
+c2, a, s1
+c2, b, s2
+c2, c, c1~
