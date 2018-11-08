@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShapeShifter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+    <div class="mainContainer">
+        <!--The start and objective shapes container-->
+        <div id="firstContainerDiv" class="containerDiv">
+            <div class="shapeDiv topShapeDiv">
+                <div class="shapeDivText">Start</div>
+                <div class="shapeDivShape">
+                    <img id="startShape" alt="Start Shape" />
+                </div>
+            </div>
+            <div class="shapeDiv">
+                <div class="shapeDivText">Objective</div>
+                <div class="shapeDivShape">
+                    <img id="objShape" alt="Objective Shape" />
+                </div>
+            </div>
+        </div>
+
+        <!--The shape relations container-->
+        <div id="secondContainerDiv" class="containerDiv">
+            <div id="levelDisplay">Level 1</div>
+            <div class="shapeRelationsContainer">
+                <div class="row topRow">
+                    <button class="shapeRelationDiv">
+                        <img id="firstShapeRelation" class="shapeRelation" alt="First Shape Relation" />
+                    </button>
+                    <div class="shapeRelationDiv">
+                        <img id="secondShapeRelation" class="shapeRelation" alt="Second Shape Relation" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="shapeRelationDiv">
+                        <img id="thirdShapeRelation" class="shapeRelation" alt="Third Shape Relation" />
+                    </div>
+                    <div class="shapeRelationDiv">
+                        <img id="fourthShapeRelation" class="shapeRelation" alt="Fourth Shape Relation" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/home.js"></script>
+</body>
+</html>

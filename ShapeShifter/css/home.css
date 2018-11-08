@@ -1,0 +1,101 @@
+body {
+    overflow: hidden;
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 100vh;
+}
+
+.containerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Styles for elements of page when loading the start and objective shapes. */
+#firstContainerDiv {
+    width: 250px;
+
+}
+
+.shapeRelationDiv:hover{
+    background-color: 	#F0F8FF;
+}
+
+
+
+.topShapeDiv {
+    margin-bottom: 100px;
+}
+
+.shapeDiv {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: 170px;
+    width: 100%;
+}
+
+.shapeDivText {
+    display: inline-block;
+    text-align: center;
+    font-size: 50px;
+    width: 100%;
+}
+
+.shapeDivShape {
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+}
+
+#startShape, #objShape {
+    width: 100%;
+    height: 100%;
+}
+
+/* Styles for elements of page when loading the preinitialized shape relations. */
+#secondContainerDiv {
+    display: none;
+    width: 540px;
+}
+
+#levelDisplay {
+    text-align: center;
+    width: 100%;
+}
+
+.shapeRelationsContainer {
+    border: 1px solid black;
+    padding: 20px 0px;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.topRow {
+    margin-bottom: 20px;
+}
+
+.shapeRelationDiv {
+    border: 1px solid black;
+    display: inline-block;
+    width: 230px;
+    height: 230px;
+}
+
+.shapeRelation {
+    width: 100%;
+    height: 100%;
+}
