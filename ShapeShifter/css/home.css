@@ -145,3 +145,15 @@ body {
     width: 80%;
     height: 80%;
 }
+
+/* Styles for user in-game stats. */
+#userStatsContainer {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 10%;
+}
+
+.userStats {
+    width: 100%;
+}

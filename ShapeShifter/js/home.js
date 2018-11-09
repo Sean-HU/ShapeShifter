@@ -32,6 +32,7 @@ function loadAvailableInputs(availableShapes, duds) {
 
     document.getElementById('secondContainerDiv').style.display = 'none';
     document.getElementById('thirdContainerDiv').style.display = 'flex';
+    document.getElementById('userStatsContainer').style.display = 'flex';
 }
 
 function shuffle(array) {
