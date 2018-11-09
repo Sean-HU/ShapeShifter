@@ -6,6 +6,10 @@ function loadShapes(availableShapes) {
     document.getElementById('objShape').setAttribute('src', shuffledShapes[1]);
 }
 
+function nextButtonClicked() {
+    loadShapeRelations(shapeRelations);
+}
+
 function loadShapeRelations(shapeRelations) {
     // Shuffle the shapeRelations array first, fill in the shapeRelation divs, then change the displays of the
     // first and second ContainerDivs.
@@ -17,7 +21,7 @@ function loadShapeRelations(shapeRelations) {
     document.getElementById('firstContainerDiv').style.display = 'none';
     document.getElementById('secondContainerDiv').style.display = 'flex';
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 3000);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 5000);
 }
 
 function loadAvailableInputs(availableShapes, duds) {
@@ -32,7 +36,6 @@ function loadAvailableInputs(availableShapes, duds) {
 
     document.getElementById('secondContainerDiv').style.display = 'none';
     document.getElementById('thirdContainerDiv').style.display = 'flex';
-    document.getElementById('userStatsContainer').style.display = 'flex';
 }
 
 function shuffle(array) {
@@ -93,5 +96,4 @@ var duds = [
 
 window.onload = function() {
     loadShapes(availableShapes);
-    window.setTimeout(function() {loadShapeRelations(shapeRelations)}, 3000);
 }

@@ -21,6 +21,7 @@
                     <img id="objShape" alt="Objective Shape" />
                 </div>
             </div>
+            <button id="nextButton" onclick="nextButtonClicked()">Continue...</button>
         </div>
 
         <!--The shape relations container-->
@@ -48,6 +49,11 @@
 
         <!--User input container-->
         <div id="thirdContainerDiv" class="containerDiv">
+            <!--User in-game stats-->
+            <div id="userStatsContainer" class="containerDiv">
+                <h3 class="userStats">Strikes: <span id="numStrikes"></span></h3>
+                <h3 class="userStats">Entries: <span id="numEntries"></span></h3>
+            </div>
             <div class="pastInputContainer">
                 <div id="pastInputText">Your Input:</div>
                 <div id="pastInputDiv"></div>
@@ -77,12 +83,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!--User in-game stats-->
-        <div id="userStatsContainer" class="containerDiv">
-            <h3 class="userStats">Strikes: <span id="numStrikes"></span></h3>
-            <h3 class="userStats">Entries: <span id="numEntries"></span></h3>
         </div>
     </div>
     <script src="../js/home.js"></script>

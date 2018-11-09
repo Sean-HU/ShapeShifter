@@ -56,6 +56,16 @@ body {
     height: 80%;
 }
 
+#nextButton {
+    position: absolute;
+    right: 15%;
+    top: 50%;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 /* Styles for elements of page when loading the preinitialized shape relations. */
 #secondContainerDiv {
     display: none;
@@ -148,7 +158,6 @@ body {
 
 /* Styles for user in-game stats. */
 #userStatsContainer {
-    display: none;
     position: absolute;
     top: 50px;
     left: 10%;
