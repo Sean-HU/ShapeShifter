@@ -17,13 +17,13 @@ function loadShapeRelations(shapeRelations) {
     document.getElementById('firstContainerDiv').style.display = 'none';
     document.getElementById('secondContainerDiv').style.display = 'flex';
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes)}, 3000);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 3000);
 }
 
-function loadAvailableInputs(availableShapes) {
+function loadAvailableInputs(availableShapes, duds) {
     // Shuffle the input array and load the available shapes into the inputShapeDivs.
-    var shuffledInputs = shuffle(availableShapes);
-    for (var i = 1; i < 5; ++i) {
+    var shuffledInputs = shuffle(availableShapes.concat(duds));
+    for (var i = 1; i < 7; ++i) {
         document.getElementById('inputShape' + i).setAttribute('src', shuffledInputs[i - 1]);
         document.getElementById('inputShape' + i).onclick = function(event) {
             appendInput(event);
@@ -85,6 +85,10 @@ var shapeRelations = [
     './shapes/relations/sprite2.png',
     './shapes/relations/sprite3.png',
     './shapes/relations/sprite4.png'];
+
+var duds = [
+    './shapes/inputs/duds/black_triangle.png',
+    './shapes/inputs/duds/blue_triangle.png'];
 
 window.onload = function() {
     loadShapes(availableShapes);
