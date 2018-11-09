@@ -1,3 +1,4 @@
+const fs = require('fs')
 // state functioninition inherited from assignment 1
 class State {
     //var name;
@@ -117,7 +118,7 @@ function check_epsilons(m) {
 function load_machines(file_names) {
     var machines = [];
     for (file_name in file_names){
-        var load_manager = new File(filename);
+        var load_manager = new File(file_names,file_name)
         load_manager.open("r");
         load_manager.re
         states = {}
@@ -125,48 +126,53 @@ function load_machines(file_names) {
         finals = []
         alphabet = []
         load_manager.read(1)  // removes 'Q' padding
-        while (load_manager.read(1) != '\n'):  // checks for newline
-        load_manager.read(1)  // skip over formatting space
-        state = load_manager.read(2) // read a state
-        states[state] = State(state)
-
+        while (load_manager.read(1) != '\n') // checks for newline
+        {  
+            load_manager.read(1)  // skip over formatting space
+            state = load_manager.read(2) // read a state
+            states[state] = State(state)
+        }
         load_manager.read(2)  // removes 'E:' padding
-        while (load_manager.read(1) != '\n'):  // checks for newline
-        alphabet.push(load_manager.read(1))  // read a character
-
+        while (load_manager.read(1) != '\n')
+        {  // checks for newline
+            alphabet.push(load_manager.read(1))  // read a character
+        }
         load_manager.read(1)  // removes 's' padding
-        while (load_manager.read(1) != '\n'):  // checks for newline
-        load_manager.read(1)  // skip over formatting space
-        starts.push(load_manager.read(2))  // read a state
-
+        while (load_manager.read(1) != '\n')
+        {   // checks for newline
+            load_manager.read(1)  // skip over formatting space
+            starts.push(load_manager.read(2))  // read a state
+        }
         load_manager.read(1)  // removes 'F' padding
-        while (load_manager.read(1) != '\n'):  // checks for newline
-        load_manager.read(1)  // skip over formatting space
-        states[load_manager.read(2)].isfinal = true  // update "final" status
+        while (load_manager.read(1) != '\n')
+        {  // checks for newline
+            load_manager.read(1)  // skip over formatting space
+            states[load_manager.read(2)].isfinal = true  // update "final" status
+        }
 
 
         load_manager.read(2)  // removes 'd:' padding
-        while (load_manager.read(1) != '~'): // while not end of file
-        source = load_manager.read(2)
-        load_manager.read(2)  // removes ', ' padding
-        character = load_manager.read(1)
-        load_manager.read(2)  // removes ', ' padding
-        destination = load_manager.read(2)
+        while (load_manager.read(1) != '~')
+        { // while not end of file
+            source = load_manager.read(2)
+            load_manager.read(2)  // removes ', ' padding
+            character = load_manager.read(1)
+            load_manager.read(2)  // removes ', ' padding
+            destination = load_manager.read(2)
 
-        if character === '_':  //convert special character to epsilon
-        character = ''
+            if (character === '_')  //convert special character to epsilon
+                character = ''
 
-        if not(character in states[source].arrows):
-        states[source].arrows[character] = []
+            if (!character in states[source].arrows)
+                states[source].arrows[character] = []
 
-        states[source].arrows[character].push(destination)
+            states[source].arrows[character].push(destination)
+        }
         load_manager.close()
-
-        machines.push(Machine(starts[
-    :],
-        alphabet[
-    :],
-        states.slice();
+        startsCopy = Object.assign({},starts)
+        alphabetCopy = Object.assign({},alphabet)
+        statesCopy = Object.assign({},states)
+        machines.push(Machine(startsCopy,alphabetCopy,statesCopy.slice()))
     }
     return machines
 }
@@ -190,7 +196,7 @@ function run_level(machines,level,user_chances=3,user_entries=10) {
 
         // run simulation with user input
         // THIS IS SHOULD BE WHEN A SHAPE IS CLICKED
-        var user_input = prompt("Enter a route.");
+        var user_input = console.log("Enter a route.");
         var return_list = execute_input(current_machine, user_input);
         current_machine.current = return_list[0];
         stage_clear_flag = return_list[1];
@@ -219,3 +225,4 @@ function run_level(machines,level,user_chances=3,user_entries=10) {
 // main code
  var machines = load_machines(["machines.txt"]);
 run_level(machines,0);
+
