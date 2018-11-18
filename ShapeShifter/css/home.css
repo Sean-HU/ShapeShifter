@@ -21,14 +21,7 @@ body {
 /* Styles for elements of page when loading the start and objective shapes. */
 #firstContainerDiv {
     width: 250px;
-
 }
-
-.shapeRelationDiv:hover{
-    background-color: 	#F0F8FF;
-}
-
-
 
 .topShapeDiv {
     margin-bottom: 100px;
@@ -50,15 +43,27 @@ body {
 }
 
 .shapeDivShape {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100px;
     width: 100px;
     border: 1px solid black;
 }
 
 #startShape, #objShape {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
+}
+
+#nextButton {
+    position: absolute;
+    right: 15%;
+    top: 50%;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 /* Styles for elements of page when loading the preinitialized shape relations. */
@@ -74,7 +79,7 @@ body {
 
 .shapeRelationsContainer {
     border: 1px solid black;
-    padding: 20px 0px;
+    padding: 20px 0;
     width: 100%;
 }
 
@@ -90,12 +95,74 @@ body {
 
 .shapeRelationDiv {
     border: 1px solid black;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     width: 230px;
     height: 230px;
 }
 
+.shapeRelationDiv:hover{
+    background-color: #F0F8FF;
+}
+
 .shapeRelation {
+    width: 80%;
+    height: 80%;
+}
+
+/* Styles for elements of user input/gameplay page. */
+#thirdContainerDiv {
+    display: none;
+    width: 700px;
+}
+
+.pastInputContainer {
     width: 100%;
-    height: 100%;
+    margin-bottom: 100px;
+}
+
+#pastInputText {
+    font-size: 20px;
+    width: 100%;
+}
+
+#pastInputDiv {
+    display: inline-block;
+    height: 100px;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+.inputShapesContainer {
+    width: 400px;
+}
+
+.inputShapeDiv {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    width: 100px;
+}
+
+.inputShape {
+    cursor: pointer;
+    width: 80%;
+    height: 80%;
+}
+
+/* Styles for user in-game stats. */
+#userStatsContainer {
+    position: absolute;
+    top: 50px;
+    left: 10%;
+}
+
+.userStats {
+    width: 100%;
 }
