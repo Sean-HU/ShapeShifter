@@ -184,7 +184,7 @@ var inputSequence = [];
 var acceptedSequences = [
     ['./shapes/inputs/black_square.png'],
     ['./shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png'],
-    ['./shapes/inputs/blue_circle.png', './shapes/inputs/blue_square.png', './shapes/inputs/black_square.png']];
+    ['./shapes/inputs/blue_circle.png', './shapes/inputs/blue_square.png', './shapes/inputs/black_square.png', './shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png']];
 
 // Initialize user stats.
 var NUM_STRIKES = 0;
