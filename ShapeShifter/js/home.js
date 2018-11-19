@@ -30,7 +30,7 @@ function loadShapeRelations() {
     document.getElementById('thirdContainerDiv').style.display = 'none';
     document.getElementById('secondContainerDiv').style.display = 'flex';
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 100);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 5000);
 }
 
 function loadAvailableInputs() {
@@ -276,7 +276,7 @@ function updateStrikesAndCheckLose() {
     // Show user countdown screen and call the loadShapeRelations() function which also randomizes the input shapes
     // locations.
     // document.getElementById('countDownScreen').style.display = 'flex';
-    window.setTimeout(function() {loadShapeRelations()}, 100);
+    window.setTimeout(function() {loadShapeRelations()}, 3000);
     alert("Strike! Shape Relations will show in 3 seconds...");
     return false;
 }
