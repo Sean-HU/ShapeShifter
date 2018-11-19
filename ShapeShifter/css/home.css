@@ -118,17 +118,17 @@ body {
     width: 700px;
 }
 
-.pastInputContainer {
+.pastInputContainer, .traversedPathsContainer {
     width: 100%;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
 }
 
-#pastInputText {
+#pastInputText, #traversedPathsText {
     font-size: 20px;
     width: 100%;
 }
 
-#pastInputDiv {
+#pastInputDiv, #traversedPathsDiv {
     display: inline-block;
     height: 100px;
     width: 100%;
@@ -138,11 +138,15 @@ body {
     overflow-x: scroll;
 }
 
-.inputShapesContainer {
-    width: 400px;
+#traversedPathsDiv {
+    height: 200px;
 }
 
-.inputShapeDiv {
+.inputShapesContainer {
+    width: auto;
+}
+
+.inputShapeDiv, .traversalPathDiv {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -150,8 +154,18 @@ body {
     width: 100px;
 }
 
+.traversalPathDiv {
+    height: 200px;
+    width: 200px;
+}
+
 .inputShape {
     cursor: pointer;
+    width: 80%;
+    height: 80%;
+}
+
+.traversalPath {
     width: 80%;
     height: 80%;
 }

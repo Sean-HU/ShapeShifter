@@ -3,8 +3,18 @@ function loadShapes() {
     // TODO: uncomment the randomization part and change the srcs.
     // var shuffledShapes = shuffle(availableShapes);
 
-    document.getElementById('startShape').setAttribute('src', availableShapes[0]);
-    document.getElementById('objShape').setAttribute('src', availableShapes[1]);
+    // Preparing the Start Shape.
+    let shape = availableShapes[0];
+    var shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
+    startShape = shapeName;
+    currShapes = new Set([startShape]);
+    document.getElementById('startShape').setAttribute('src', shape);
+
+    // Preparing the Object Shape.
+    shape = availableShapes[1];
+    shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
+    objShape = shapeName;
+    document.getElementById('objShape').setAttribute('src', shape);
 }
 
 function loadShapeRelations() {
@@ -35,11 +45,69 @@ function loadAvailableInputs() {
 
     // Shuffle the input array and load the available shapes into the inputShapeDivs.
     var shuffledInputs = shuffle(availableShapes.concat(duds));
-    for (var i = 1; i < 7; ++i) {
-        document.getElementById('inputShape' + i).setAttribute('src', shuffledInputs[i - 1]);
-        document.getElementById('inputShape' + i).onclick = function(event) {
-            appendInput(event);
-        };
+
+    var inputShapesContainer = document.getElementById('inputShapesContainer');
+
+    // Fill top and bottom row of inputShapes evenly if length of array greater than 3.
+    let shuffledInputsLength = shuffledInputs.length;
+    if (shuffledInputsLength >= 3) {
+        // Fill the topRow with half of the array elements.
+        let inputShapesTopRow = document.createElement('div');
+        inputShapesTopRow.setAttribute("class", "row topRow");
+        for (var i = 0; i < Math.floor(shuffledInputsLength/2); ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesTopRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesTopRow);
+        }
+
+        // Fill the bottom Row with the remaining half of the array elements.
+        let inputShapesBotRow = document.createElement('div');
+        inputShapesBotRow.setAttribute("class", "row");
+        for (var i = Math.floor(shuffledInputsLength/2); i < shuffledInputsLength; ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesBotRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesBotRow);
+        }
+
+    } else {
+        // Fill all elements in a single row.
+        let inputShapesRow = document.createElement('div');
+        inputShapesRow.setAttribute("class", "row");
+        for (var i = 0; i < shuffledInputsLength; ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesRow);
+        }
     }
 
     document.getElementById('secondContainerDiv').style.display = 'none';
@@ -94,7 +162,42 @@ function validateInput(inputShapeSrc) {
     // User strikes if the input is not part of the language or if the NUM_ENTRIES reaches 0.
     // Show the user the relations again and reset all elements of gameplay page except the stats, if user still has not
     // lost yet.
-    if (!availableShapes.includes(inputShapeSrc)) {
+
+    // Whenever the user enters a new input, reset the traversedPathsDiv.
+    resetTraversedPathsDiv();
+
+    // Boolean to check if at least one current state will produce a valid path with the current move.
+    var validRelationExists = false;
+    var inputShapeName = inputShapeSrc.substring(inputShapeSrc.lastIndexOf('/')+1, inputShapeSrc.lastIndexOf("."));
+    let newCurrShapes = new Set();
+
+    // Append the traversed paths (relations) if they are valid.
+    for (var currShape of currShapes) {
+        var traversalSrc = './shapes/traversals/' + currShape + '_t_' + inputShapeName + '.png';
+        if (shapeTraversals.includes(traversalSrc)) {
+            // Means move is valid.
+            validRelationExists = true;
+            appendTraversedPath(traversalSrc);
+
+            // If the shapeName contains _n_, this means that the shape is a hybrid. In this case, the hybrid needs to
+            // be treated as two separate shapes for newCurrShapes.
+            var indexOfN = inputShapeName.indexOf("_n_")
+            if (indexOfN != -1) {
+                var shape1 = inputShapeName.substring(0, indexOfN);
+                if (!newCurrShapes.has(shape1)) newCurrShapes.add(shape1);
+
+                var shape2 = inputShapeName.substring(inputShapeName.lastIndexOf('_')+1);
+                if (!newCurrShapes.has(shape2)) newCurrShapes.add(shape2);
+            } else {
+                // Case when the shape is an individual.
+                if (!newCurrShapes.has(inputShapeName)) newCurrShapes.add(inputShapeName);
+            }
+        }
+    }
+    currShapes = newCurrShapes;
+
+    // After the loop, if there was no valid relation paths from all the current states, strike the user.
+    if (!validRelationExists) {
         updateStrikesAndCheckLose();
         return false;
     }
@@ -103,7 +206,7 @@ function validateInput(inputShapeSrc) {
     // If not, check if NUM_ENTRIES is 0, in which case the user strikes.
     NUM_ENTRIES -= 1;
     document.getElementById('numEntries').innerHTML = NUM_ENTRIES;
-    if (checkAcceptState()) {
+    if (currShapes.has(objShape)) {
         // document.getElementById('winScreen').style.display = 'flex';
         alert("You Won!");
         return true;
@@ -115,6 +218,21 @@ function validateInput(inputShapeSrc) {
     }
 }
 
+function appendTraversedPath(traversalSrc) {
+    let newTraversalPathDiv = document.createElement('div');
+    newTraversalPathDiv.setAttribute("class", "traversalPathDiv");
+
+    // Create a div to hold the icons.
+    let traversalPath = document.createElement('img');
+    traversalPath.setAttribute("class", "traversalPath");
+    traversalPath.setAttribute("src", traversalSrc);
+    newTraversalPathDiv.appendChild(traversalPath);
+
+    let traversedPathsDiv = document.getElementById('traversedPathsDiv');
+    traversedPathsDiv.appendChild(newTraversalPathDiv);
+    traversedPathsDiv.scroll(traversedPathsDiv.scrollWidth, 0);
+}
+
 function resetInputHistory() {
     // Resets user input history.
     var pastInputDiv = document.getElementById('pastInputDiv');
@@ -122,14 +240,26 @@ function resetInputHistory() {
         pastInputDiv.removeChild(pastInputDiv.firstChild);
     }
     inputSequence = [];
+
+    // Resets inputShapesContainer div.
+    var inputShapesContainer = document.getElementById('inputShapesContainer');
+    while (inputShapesContainer.firstChild) {
+        inputShapesContainer.removeChild(inputShapesContainer.firstChild);
+    }
+
+    // Resets traversedPathsDiv.
+    resetTraversedPathsDiv();
+
+    // Resets the currShapes to just hold the startShape.
+    currShapes = [startShape];
 }
 
-function checkAcceptState() {
-    // Check if inputSequence thus far is in list of acceptedSequences.
-    for (acceptedSequence of acceptedSequences) {
-        if (arraysEqual(inputSequence, acceptedSequence)) return true;
+function resetTraversedPathsDiv() {
+    // Resets traversedPathsDiv.
+    var traversedPathsDiv = document.getElementById('traversedPathsDiv');
+    while (traversedPathsDiv.firstChild) {
+        traversedPathsDiv.removeChild(traversedPathsDiv.firstChild);
     }
-    return false;
 }
 
 function updateStrikesAndCheckLose() {
@@ -151,23 +281,14 @@ function updateStrikesAndCheckLose() {
     return false;
 }
 
-function arraysEqual(arr1, arr2) {
-    if(arr1.length !== arr2.length)
-        return false;
-    for(var i = arr1.length; i--;) {
-        if(arr1[i] !== arr2[i])
-            return false;
-    }
-
-    return true;
-}
-
 // The urls are respective to the html files.
 var availableShapes = [
-    './shapes/inputs/black_circle.png',
-    './shapes/inputs/black_square.png',
-    './shapes/inputs/blue_circle.png',
-    './shapes/inputs/blue_square.png'];
+    './shapes/inputs/blkc.png',
+    './shapes/inputs/blks.png',
+    './shapes/inputs/bluc.png',
+    './shapes/inputs/blus.png',
+    './shapes/inputs/blkc_n_bluc.png',
+    './shapes/inputs/blks_n_blus.png'];
 
 var shapeRelations = [
     './shapes/relations/sprite.png',
@@ -175,20 +296,31 @@ var shapeRelations = [
     './shapes/relations/sprite3.png',
     './shapes/relations/sprite4.png'];
 
+var shapeTraversals = [
+    './shapes/traversals/blkc_t_blks.png',
+    './shapes/traversals/blks_t_blkc.png',
+    './shapes/traversals/blkc_t_blks_n_blus.png',
+    './shapes/traversals/blks_t_blkc_n_bluc.png',
+    './shapes/traversals/bluc_t_blks_n_blus.png'];
+
 var duds = [
-    './shapes/inputs/duds/black_triangle.png',
-    './shapes/inputs/duds/blue_triangle.png'];
+    './shapes/inputs/duds/blkt.png',
+    './shapes/inputs/duds/blut.png',
+    './shapes/inputs/duds/blkt_n_blut.png'];
 
 // TODO: will be taken care of by the translated NFA code.
 var inputSequence = [];
-var acceptedSequences = [
-    ['./shapes/inputs/black_square.png'],
-    ['./shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png'],
-    ['./shapes/inputs/blue_circle.png', './shapes/inputs/blue_square.png', './shapes/inputs/black_square.png', './shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png']];
 
 // Initialize user stats.
 var NUM_STRIKES = 0;
 var NUM_ENTRIES = 10;
+
+// Set will only store names of current shapes eg. [./shapes/inputs/black_square.png] will be just [black_square].
+var currShapes;
+
+// For the case when user strikes, currShapes will be the startShape again.
+var startShape;
+var objShape;
 
 window.onload = function() {
     loadShapes();
