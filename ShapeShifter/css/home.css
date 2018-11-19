@@ -118,17 +118,17 @@ body {
     width: 700px;
 }
 
-.pastInputContainer {
+.pastInputContainer, .traversedPathsContainer {
     width: 100%;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
 }
 
-#pastInputText {
+#pastInputText, #traversedPathsText {
     font-size: 20px;
     width: 100%;
 }
 
-#pastInputDiv {
+#pastInputDiv, #traversedPathsDiv {
     display: inline-block;
     height: 100px;
     width: 100%;
@@ -136,6 +136,10 @@ body {
     border-radius: 5px;
     white-space: nowrap;
     overflow-x: scroll;
+}
+
+#traversedPathsDiv {
+    height: 200px;
 }
 
 .inputShapesContainer {

@@ -35,11 +35,69 @@ function loadAvailableInputs() {
 
     // Shuffle the input array and load the available shapes into the inputShapeDivs.
     var shuffledInputs = shuffle(availableShapes.concat(duds));
-    for (var i = 1; i < 7; ++i) {
-        document.getElementById('inputShape' + i).setAttribute('src', shuffledInputs[i - 1]);
-        document.getElementById('inputShape' + i).onclick = function(event) {
-            appendInput(event);
-        };
+
+    var inputShapesContainer = document.getElementById('inputShapesContainer');
+
+    // Fill top and bottom row of inputShapes evenly if length of array greater than 3.
+    let shuffledInputsLength = shuffledInputs.length;
+    if (shuffledInputsLength >= 3) {
+        // Fill the topRow with half of the array elements.
+        let inputShapesTopRow = document.createElement('div');
+        inputShapesTopRow.setAttribute("class", "row topRow");
+        for (var i = 0; i < Math.floor(shuffledInputsLength/2); ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesTopRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesTopRow);
+        }
+
+        // Fill the bottom Row with the remaining half of the array elements.
+        let inputShapesBotRow = document.createElement('div');
+        inputShapesBotRow.setAttribute("class", "row");
+        for (var i = Math.floor(shuffledInputsLength/2); i < shuffledInputsLength; ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesBotRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesBotRow);
+        }
+
+    } else {
+        // Fill all elements in a single row.
+        let inputShapesRow = document.createElement('div');
+        inputShapesRow.setAttribute("class", "row");
+        for (var i = 0; i < shuffledInputsLength; ++i) {
+            let inputShapeDiv = document.createElement('div');
+            inputShapeDiv.setAttribute("class", "inputShapeDiv");
+
+            let inputShape = document.createElement('img');
+            inputShape.setAttribute("class", "inputShape");
+            inputShape.setAttribute("src", shuffledInputs[i]);
+            inputShape.onclick = function(event) {
+                appendInput(event);
+            };
+
+            inputShapeDiv.appendChild(inputShape);
+            inputShapesRow.appendChild(inputShapeDiv);
+            inputShapesContainer.appendChild(inputShapesRow);
+        }
     }
 
     document.getElementById('secondContainerDiv').style.display = 'none';
@@ -122,6 +180,12 @@ function resetInputHistory() {
         pastInputDiv.removeChild(pastInputDiv.firstChild);
     }
     inputSequence = [];
+
+    // Resets inputShapesContainer div.
+    var inputShapesContainer = document.getElementById('inputShapesContainer');
+    while (inputShapesContainer.firstChild) {
+        inputShapesContainer.removeChild(inputShapesContainer.firstChild);
+    }
 }
 
 function checkAcceptState() {
