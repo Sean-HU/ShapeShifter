@@ -15,6 +15,8 @@ function loadShapes() {
     shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
     objShape = shapeName;
     document.getElementById('objShape').setAttribute('src', shape);
+
+    hideAllExcept('firstContainerDiv');
 }
 
 function loadShapeRelations() {
@@ -26,11 +28,9 @@ function loadShapeRelations() {
     }
 
     // ThirdContainerDiv also needs to be set to none for the case when the user strikes.
-    document.getElementById('firstContainerDiv').style.display = 'none';
-    document.getElementById('thirdContainerDiv').style.display = 'none';
-    document.getElementById('secondContainerDiv').style.display = 'flex';
+    hideAllExcept('secondContainerDiv');
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 5000);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 100);
 }
 
 function loadAvailableInputs() {
@@ -110,8 +110,7 @@ function loadAvailableInputs() {
         }
     }
 
-    document.getElementById('secondContainerDiv').style.display = 'none';
-    document.getElementById('thirdContainerDiv').style.display = 'flex';
+    hideAllExcept('thirdContainerDiv');
 }
 
 function shuffle(array) {
@@ -207,8 +206,7 @@ function validateInput(inputShapeSrc) {
     NUM_ENTRIES -= 1;
     document.getElementById('numEntries').innerHTML = NUM_ENTRIES;
     if (currShapes.has(objShape)) {
-        // document.getElementById('winScreen').style.display = 'flex';
-        alert("You Won!");
+        showWinPopup();
         return true;
     }
 
@@ -268,25 +266,92 @@ function updateStrikesAndCheckLose() {
 
     // Show user the lose screen if NUM_STRIKES reaches 3.
     if (NUM_STRIKES == 3) {
-        // document.getElementById('loseScreen').style.display = 'flex';
-        alert("You lose!");
+        showLosePopup();
         return true;
     }
 
     // Show user countdown screen and call the loadShapeRelations() function which also randomizes the input shapes
     // locations.
-    // document.getElementById('countDownScreen').style.display = 'flex';
-    window.setTimeout(function() {loadShapeRelations()}, 3000);
-    alert("Strike! Shape Relations will show in 3 seconds...");
+    showCountdown(3);
     return false;
+}
+
+function showWinPopup() {
+    document.getElementById('popUpTitle').innerHTML = "You Won!";
+    document.getElementById("popUpMsg1").style.display = "none";
+    document.getElementById("popUpMsg2").style.display = "none";
+
+    document.getElementById('popUpButton1').style.display = 'inline-block';
+    document.getElementById('popUpButton1').innerHTML = "Continue to next level!";
+    document.getElementById('popUpButton1').onclick = function() {
+        nextLevel();
+    }
+
+    document.getElementById('popUpButton2').style.display = 'inline-block';
+    document.getElementById('popUpButton2').innerHTML = "Back to Main Menu...";
+    document.getElementById('popUpButton2').onclick = function() {
+        window.location.href = "index.html";
+    }
+
+    document.getElementById('popUpWindow').style.display = 'flex';
+}
+
+function nextLevel() {
+    // TODO: update the nextLevel by using a global variable currLevel and updating the input arrays.
+    loadShapes();
+}
+
+function showLosePopup() {
+    document.getElementById('popUpTitle').innerHTML = "You Lost...";
+    document.getElementById("popUpMsg1").style.display = "none";
+    document.getElementById("popUpMsg2").style.display = "none";
+
+    document.getElementById('popUpButton1').style.display = 'inline-block';
+    document.getElementById('popUpButton1').innerHTML = "Back to Main Menu...";
+    document.getElementById('popUpButton1').onclick = function() {
+        window.location.href = "index.html";
+    }
+
+    document.getElementById('popUpButton2').style.display = 'none';
+
+    document.getElementById('popUpWindow').style.display = 'flex';
+}
+
+function showCountdown(seconds) {
+    var counter = seconds;
+
+    document.getElementById("popUpTitle").innerHTML = "Strike!";
+    document.getElementById("popUpMsg1").innerHTML = "Shape Relations will show in:";
+    document.getElementById("popUpMsg1").style.display = "inline-block";
+    document.getElementById("popUpMsg2").innerHTML = counter.toString();
+    document.getElementById("popUpMsg2").style.display = "inline-block";
+    document.getElementById('popUpWindow').style.display = 'flex';
+    document.getElementById('popUpButton1').style.display = 'none';
+    document.getElementById('popUpButton2').style.display = 'none';
+
+    var strikeTimer = setInterval(function(){
+        document.getElementById("popUpMsg2").innerHTML = (--counter).toString();
+        if (counter <= 0) {
+            clearInterval(strikeTimer);
+            loadShapeRelations();
+        }
+    }, 1000);
+}
+
+// Hide all parent container divs except the specified element.
+function hideAllExcept(elementId) {
+    var containerDivs = ['firstContainerDiv', 'secondContainerDiv', 'thirdContainerDiv', 'popUpWindow'];
+    for (var containerDiv of containerDivs) {
+        document.getElementById(containerDiv).style.display = containerDiv != elementId ? 'none' : 'flex';
+    }
 }
 
 // The urls are respective to the html files.
 var availableShapes = [
     './shapes/inputs/blkc.png',
     './shapes/inputs/blks.png',
-    './shapes/inputs/bluc.png',
     './shapes/inputs/blus.png',
+    './shapes/inputs/bluc.png',
     './shapes/inputs/blkc_n_bluc.png',
     './shapes/inputs/blks_n_blus.png'];
 
@@ -298,6 +363,7 @@ var shapeRelations = [
 
 var shapeTraversals = [
     './shapes/traversals/blkc_t_blks.png',
+    './shapes/traversals/blkc_t_blus.png',
     './shapes/traversals/blks_t_blkc.png',
     './shapes/traversals/blkc_t_blks_n_blus.png',
     './shapes/traversals/blks_t_blkc_n_bluc.png',
@@ -308,7 +374,7 @@ var duds = [
     './shapes/inputs/duds/blut.png',
     './shapes/inputs/duds/blkt_n_blut.png'];
 
-// TODO: will be taken care of by the translated NFA code.
+// May use to show user all their input history when they lose.
 var inputSequence = [];
 
 // Initialize user stats.
