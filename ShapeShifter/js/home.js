@@ -3,7 +3,11 @@ function loadShapes() {
     // TODO: uncomment the randomization part and change the srcs.
     // var shuffledShapes = shuffle(availableShapes);
 
-    document.getElementById('startShape').setAttribute('src', availableShapes[0]);
+    let currShape = availableShapes[0];
+    var currShapeName = currShape.substring(currShape.lastIndexOf('/')+1, currShape.lastIndexOf("."));
+    startShape = currShapeName;
+    currShapes = new Set([startShape]);
+    document.getElementById('startShape').setAttribute('src', currShape);
     document.getElementById('objShape').setAttribute('src', availableShapes[1]);
 }
 
@@ -20,7 +24,7 @@ function loadShapeRelations() {
     document.getElementById('thirdContainerDiv').style.display = 'none';
     document.getElementById('secondContainerDiv').style.display = 'flex';
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 5000);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 100);
 }
 
 function loadAvailableInputs() {
@@ -152,7 +156,34 @@ function validateInput(inputShapeSrc) {
     // User strikes if the input is not part of the language or if the NUM_ENTRIES reaches 0.
     // Show the user the relations again and reset all elements of gameplay page except the stats, if user still has not
     // lost yet.
-    if (!availableShapes.includes(inputShapeSrc)) {
+
+    // Whenever the user enters a new input, reset the traversedPathsDiv.
+    resetTraversedPathsDiv();
+
+    // Boolean to check if at least one current state will produce a valid path with the current move.
+    var validRelationExists = false;
+    var inputShapeName = inputShapeSrc.substring(inputShapeSrc.lastIndexOf('/')+1, inputShapeSrc.lastIndexOf("."));
+    let newCurrShapes = new Set();
+    console.log(currShapes);
+
+    // Append the traversed paths (relations) if they are valid.
+    for (var currShape of currShapes) {
+        var traversalSrc = './shapes/traversals/' + currShape + '_to_' + inputShapeName + '.png';
+        if (shapeTraversals.includes(traversalSrc)) {
+            // Means move is valid.
+            validRelationExists = true;
+            appendTraversedPath(traversalSrc);
+
+            // TODO: parse shape name for more than 2 shapes input.
+            if (!newCurrShapes.has(inputShapeName)) {
+                newCurrShapes.add(inputShapeName);
+            }
+        }
+    }
+    currShapes = newCurrShapes;
+
+    // After the loop, if there was no valid relation paths from all the current states, strike the user.
+    if (!validRelationExists) {
         updateStrikesAndCheckLose();
         return false;
     }
@@ -173,6 +204,21 @@ function validateInput(inputShapeSrc) {
     }
 }
 
+function appendTraversedPath(traversalSrc) {
+    let newTraversalPathDiv = document.createElement('div');
+    newTraversalPathDiv.setAttribute("class", "traversalPathDiv");
+
+    // Create a div to hold the icons.
+    let traversalPath = document.createElement('img');
+    traversalPath.setAttribute("class", "traversalPath");
+    traversalPath.setAttribute("src", traversalSrc);
+    newTraversalPathDiv.appendChild(traversalPath);
+
+    let traversedPathsDiv = document.getElementById('traversedPathsDiv');
+    traversedPathsDiv.appendChild(newTraversalPathDiv);
+    traversedPathsDiv.scroll(traversedPathsDiv.scrollWidth, 0);
+}
+
 function resetInputHistory() {
     // Resets user input history.
     var pastInputDiv = document.getElementById('pastInputDiv');
@@ -185,6 +231,20 @@ function resetInputHistory() {
     var inputShapesContainer = document.getElementById('inputShapesContainer');
     while (inputShapesContainer.firstChild) {
         inputShapesContainer.removeChild(inputShapesContainer.firstChild);
+    }
+
+    // Resets traversedPathsDiv.
+    resetTraversedPathsDiv();
+
+    // Resets the currShapes to just hold the startShape.
+    currShapes = [startShape];
+}
+
+function resetTraversedPathsDiv() {
+    // Resets traversedPathsDiv.
+    var traversedPathsDiv = document.getElementById('traversedPathsDiv');
+    while (traversedPathsDiv.firstChild) {
+        traversedPathsDiv.removeChild(traversedPathsDiv.firstChild);
     }
 }
 
@@ -210,7 +270,7 @@ function updateStrikesAndCheckLose() {
     // Show user countdown screen and call the loadShapeRelations() function which also randomizes the input shapes
     // locations.
     // document.getElementById('countDownScreen').style.display = 'flex';
-    window.setTimeout(function() {loadShapeRelations()}, 3000);
+    window.setTimeout(function() {loadShapeRelations()}, 100);
     alert("Strike! Shape Relations will show in 3 seconds...");
     return false;
 }
@@ -239,6 +299,10 @@ var shapeRelations = [
     './shapes/relations/sprite3.png',
     './shapes/relations/sprite4.png'];
 
+var shapeTraversals = [
+    './shapes/traversals/black_circle_to_black_square.png',
+    './shapes/traversals/black_square_to_black_circle.png'];
+
 var duds = [
     './shapes/inputs/duds/black_triangle.png',
     './shapes/inputs/duds/blue_triangle.png'];
@@ -253,6 +317,12 @@ var acceptedSequences = [
 // Initialize user stats.
 var NUM_STRIKES = 0;
 var NUM_ENTRIES = 10;
+
+// Set will only store names of current shapes eg. [./shapes/inputs/black_square.png] will be just [black_square].
+var currShapes;
+
+// For the case when user strikes, currShapes will be the startShape again.
+var startShape;
 
 window.onload = function() {
     loadShapes();

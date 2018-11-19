@@ -146,7 +146,7 @@ body {
     width: auto;
 }
 
-.inputShapeDiv {
+.inputShapeDiv, .traversalPathDiv {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -154,8 +154,18 @@ body {
     width: 100px;
 }
 
+.traversalPathDiv {
+    height: 200px;
+    width: 200px;
+}
+
 .inputShape {
     cursor: pointer;
+    width: 80%;
+    height: 80%;
+}
+
+.traversalPath {
     width: 80%;
     height: 80%;
 }
