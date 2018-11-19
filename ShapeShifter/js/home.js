@@ -3,12 +3,18 @@ function loadShapes() {
     // TODO: uncomment the randomization part and change the srcs.
     // var shuffledShapes = shuffle(availableShapes);
 
-    let currShape = availableShapes[0];
-    var currShapeName = currShape.substring(currShape.lastIndexOf('/')+1, currShape.lastIndexOf("."));
-    startShape = currShapeName;
+    // Preparing the Start Shape.
+    let shape = availableShapes[0];
+    var shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
+    startShape = shapeName;
     currShapes = new Set([startShape]);
-    document.getElementById('startShape').setAttribute('src', currShape);
-    document.getElementById('objShape').setAttribute('src', availableShapes[1]);
+    document.getElementById('startShape').setAttribute('src', shape);
+
+    // Preparing the Object Shape.
+    shape = availableShapes[1];
+    shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
+    objShape = shapeName;
+    document.getElementById('objShape').setAttribute('src', shape);
 }
 
 function loadShapeRelations() {
@@ -164,19 +170,27 @@ function validateInput(inputShapeSrc) {
     var validRelationExists = false;
     var inputShapeName = inputShapeSrc.substring(inputShapeSrc.lastIndexOf('/')+1, inputShapeSrc.lastIndexOf("."));
     let newCurrShapes = new Set();
-    console.log(currShapes);
 
     // Append the traversed paths (relations) if they are valid.
     for (var currShape of currShapes) {
-        var traversalSrc = './shapes/traversals/' + currShape + '_to_' + inputShapeName + '.png';
+        var traversalSrc = './shapes/traversals/' + currShape + '_t_' + inputShapeName + '.png';
         if (shapeTraversals.includes(traversalSrc)) {
             // Means move is valid.
             validRelationExists = true;
             appendTraversedPath(traversalSrc);
 
-            // TODO: parse shape name for more than 2 shapes input.
-            if (!newCurrShapes.has(inputShapeName)) {
-                newCurrShapes.add(inputShapeName);
+            // If the shapeName contains _n_, this means that the shape is a hybrid. In this case, the hybrid needs to
+            // be treated as two separate shapes for newCurrShapes.
+            var indexOfN = inputShapeName.indexOf("_n_")
+            if (indexOfN != -1) {
+                var shape1 = inputShapeName.substring(0, indexOfN);
+                if (!newCurrShapes.has(shape1)) newCurrShapes.add(shape1);
+
+                var shape2 = inputShapeName.substring(inputShapeName.lastIndexOf('_')+1);
+                if (!newCurrShapes.has(shape2)) newCurrShapes.add(shape2);
+            } else {
+                // Case when the shape is an individual.
+                if (!newCurrShapes.has(inputShapeName)) newCurrShapes.add(inputShapeName);
             }
         }
     }
@@ -192,7 +206,7 @@ function validateInput(inputShapeSrc) {
     // If not, check if NUM_ENTRIES is 0, in which case the user strikes.
     NUM_ENTRIES -= 1;
     document.getElementById('numEntries').innerHTML = NUM_ENTRIES;
-    if (checkAcceptState()) {
+    if (currShapes.has(objShape)) {
         // document.getElementById('winScreen').style.display = 'flex';
         alert("You Won!");
         return true;
@@ -248,14 +262,6 @@ function resetTraversedPathsDiv() {
     }
 }
 
-function checkAcceptState() {
-    // Check if inputSequence thus far is in list of acceptedSequences.
-    for (acceptedSequence of acceptedSequences) {
-        if (arraysEqual(inputSequence, acceptedSequence)) return true;
-    }
-    return false;
-}
-
 function updateStrikesAndCheckLose() {
     NUM_STRIKES += 1;
     document.getElementById('numStrikes').innerHTML = NUM_STRIKES;
@@ -275,23 +281,14 @@ function updateStrikesAndCheckLose() {
     return false;
 }
 
-function arraysEqual(arr1, arr2) {
-    if(arr1.length !== arr2.length)
-        return false;
-    for(var i = arr1.length; i--;) {
-        if(arr1[i] !== arr2[i])
-            return false;
-    }
-
-    return true;
-}
-
 // The urls are respective to the html files.
 var availableShapes = [
-    './shapes/inputs/black_circle.png',
-    './shapes/inputs/black_square.png',
-    './shapes/inputs/blue_circle.png',
-    './shapes/inputs/blue_square.png'];
+    './shapes/inputs/blkc.png',
+    './shapes/inputs/blks.png',
+    './shapes/inputs/bluc.png',
+    './shapes/inputs/blus.png',
+    './shapes/inputs/blkc_n_bluc.png',
+    './shapes/inputs/blks_n_blus.png'];
 
 var shapeRelations = [
     './shapes/relations/sprite.png',
@@ -300,19 +297,19 @@ var shapeRelations = [
     './shapes/relations/sprite4.png'];
 
 var shapeTraversals = [
-    './shapes/traversals/black_circle_to_black_square.png',
-    './shapes/traversals/black_square_to_black_circle.png'];
+    './shapes/traversals/blkc_t_blks.png',
+    './shapes/traversals/blks_t_blkc.png',
+    './shapes/traversals/blkc_t_blks_n_blus.png',
+    './shapes/traversals/blks_t_blkc_n_bluc.png',
+    './shapes/traversals/bluc_t_blks_n_blus.png'];
 
 var duds = [
-    './shapes/inputs/duds/black_triangle.png',
-    './shapes/inputs/duds/blue_triangle.png'];
+    './shapes/inputs/duds/blkt.png',
+    './shapes/inputs/duds/blut.png',
+    './shapes/inputs/duds/blkt_n_blut.png'];
 
 // TODO: will be taken care of by the translated NFA code.
 var inputSequence = [];
-var acceptedSequences = [
-    ['./shapes/inputs/black_square.png'],
-    ['./shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png'],
-    ['./shapes/inputs/blue_circle.png', './shapes/inputs/blue_square.png', './shapes/inputs/black_square.png', './shapes/inputs/blue_circle.png', './shapes/inputs/black_square.png']];
 
 // Initialize user stats.
 var NUM_STRIKES = 0;
@@ -323,6 +320,7 @@ var currShapes;
 
 // For the case when user strikes, currShapes will be the startShape again.
 var startShape;
+var objShape;
 
 window.onload = function() {
     loadShapes();
