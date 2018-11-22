@@ -128,7 +128,212 @@ function load_machines(levels) {
     for (var i = 0; i < levels.length; i++) {
         console.log(levels[i]);
         switch (levels[i]) {
+            case 0:
+                temp_states = ["s2", "c1"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s2"];
+                finals = ["c1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s2", "a", "c1"],
+                        ["c1", "a", "s2"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
             case 1:
+                temp_states = ["s1", "s2", "c1", "c2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s2"];
+                finals = ["s1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s1", "a", "s2"],
+                        ["s2", "a", "c2"],
+                        ["c1", "a", "s1"],
+                        ["c2", "a", "c1"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 2:
+                temp_states = ["s1", "s2", "c1", "c2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s2"];
+                finals = ["s1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s1", "a", "c1"],
+                        ["s2", "a", "s1"],
+                        ["s2", "b", "c1"],
+                        ["c1", "a", "c2"],
+                        ["c2", "a", "s1"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 3:
+                temp_states = ["s1", "c1", "t1", "t2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["t1"];
+                finals = ["c1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s1", "a", "c1"],
+                        ["s1", "b", "t1"],
+                        ["c1", "a", "t2"],
+                        ["t1", "a", "t2"],
+                        ["t2", "a", "s1"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 4:
+                temp_states = ["s1", "s2", "c1", "t1", "t2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s1"];
+                finals = ["c1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s1", "a", "t2"],
+                        ["s1", "b", "t1"],
+                        ["s2", "a", "c1"],
+                        ["c1", "a", "t2"],
+                        ["t1", "a", "c1"],
+                        ["t2", "a", "s2"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 5:
+                temp_states = ["s2", "c1", "c2", "t1", "t2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s2"];
+                finals = ["t1"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s2", "a", "c1"],
+                        ["c1", "a", "t2"],
+                        ["c1", "", "c2"],
+                        ["c2", "a", "t1"],
+                        ["t1", "a", "s2"],
+                        ["t2", "a", "s2"],
+                        ["t2", "a", "s2"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 6:
+                temp_states = ["s1", "s2", "c1", "c2", "t1", "t2"];
+                for (var x = 0; x < temp_states.length; x++) {
+                    states[temp_states[x]] = new State(temp_states[x]);
+                }
+                alphabet = ["a", "b", "c"];
+                starts = ["s2"];
+                finals = ["c2"];
+                for (var j = 0; j < finals.length; j++){
+                    states[finals[j]].isfinal = true;
+                }
+                d =
+                    [["s1", "a", "c2"],
+                        ["s2", "a", "t1"],
+                        ["c1", "a", "t2"],
+                        ["c1", "b", "c2"],
+                        ["c2", "a", "s2"],
+                        ["t1", "a", "s1"],
+                        ["t1", "", "c1"],
+                        ["t2", "a", "s2"]];
+                for (var j = 0; j < d.length; j++) {
+                    source = d[j][0];
+                    character = d[j][1];
+                    destination = d[j][2];
+                    console.log(source);
+                    if (!(character in states[source].arrows)) {
+                        states[source].arrows[character] = [];
+                    }
+                    states[source].arrows[character].push(destination);
+                }
+                break;
+
+            case 7:
                 temp_states = ["s1", "s2", "c1", "c2"];
                 for (var x = 0; x < temp_states.length; x++) {
                     states[temp_states[x]] = new State(temp_states[x]);
@@ -219,6 +424,6 @@ function run_level(machines,level,user_chances=3,user_entries=10) {
 
 
 // main code
-var levels = [1];
+var levels = [0];
 var machines = load_machines(levels);
 run_level(machines,0);
