@@ -16,21 +16,28 @@ function loadShapes() {
     objShape = shapeName;
     document.getElementById('objShape').setAttribute('src', shape);
 
+    CURR_LEVEL++;
+
     hideAllExcept('firstContainerDiv');
 }
 
 function loadShapeRelations() {
+    // Display current level.
+    document.getElementById('levelDisplay').innerHTML = "Level " + CURR_LEVEL;
+
+    // Reset shapeRelationsContainer.
+    resetShapeRelationsContainer();
+
     // Shuffle the shapeRelations array first, fill in the shapeRelation divs, then change the displays of the
     // first and second ContainerDivs.
     var shuffledRelations = shuffle(shapeRelations);
-    for (var i = 1; i < 5; ++i) {
-        document.getElementById('shapeRelation' + i).setAttribute('src', shuffledRelations[i - 1]);
-    }
+
+    evenlyLoadElementsIntoContainer(shuffledRelations, "shapeRelationDiv", "shapeRelation", null, "shapeRelationsContainer");
 
     // ThirdContainerDiv also needs to be set to none for the case when the user strikes.
     hideAllExcept('secondContainerDiv');
 
-    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, 100);
+    window.setTimeout(function() {loadAvailableInputs(availableShapes, duds)}, SHOW_RELATIONS_MS);
 }
 
 function loadAvailableInputs() {
@@ -45,72 +52,62 @@ function loadAvailableInputs() {
 
     // Shuffle the input array and load the available shapes into the inputShapeDivs.
     var shuffledInputs = shuffle(availableShapes.concat(duds));
+    var imgClickFunct = function(event) {
+        appendInput(event);
+    }
 
-    var inputShapesContainer = document.getElementById('inputShapesContainer');
+    evenlyLoadElementsIntoContainer(shuffledInputs, "inputShapeDiv", "inputShape", imgClickFunct, "inputShapesContainer");
 
-    // Fill top and bottom row of inputShapes evenly if length of array greater than 3.
-    let shuffledInputsLength = shuffledInputs.length;
-    if (shuffledInputsLength >= 3) {
+    hideAllExcept('thirdContainerDiv');
+}
+
+function makeImgDiv(element, divClass, imgClass, imgClickFunct) {
+    let newDiv = document.createElement('div');
+    newDiv.setAttribute("class", divClass);
+
+    let newImg = document.createElement('img');
+    newImg.setAttribute("class", imgClass);
+    newImg.setAttribute("src", element);
+    if (imgClickFunct != null) newImg.onclick = imgClickFunct;
+
+    newDiv.appendChild(newImg);
+    return newDiv;
+}
+
+function evenlyLoadElementsIntoContainer(shuffledArr, divClass, imgClass, imgClickFunct, containerId) {
+    var container = document.getElementById(containerId);
+
+    // Fill top and bottom row evenly if length of array greater than 3.
+    let shuffledArrLength = shuffledArr.length;
+    if (shuffledArrLength > 3) {
         // Fill the topRow with half of the array elements.
-        let inputShapesTopRow = document.createElement('div');
-        inputShapesTopRow.setAttribute("class", "row topRow");
-        for (var i = 0; i < Math.floor(shuffledInputsLength/2); ++i) {
-            let inputShapeDiv = document.createElement('div');
-            inputShapeDiv.setAttribute("class", "inputShapeDiv");
-
-            let inputShape = document.createElement('img');
-            inputShape.setAttribute("class", "inputShape");
-            inputShape.setAttribute("src", shuffledInputs[i]);
-            inputShape.onclick = function(event) {
-                appendInput(event);
-            };
-
-            inputShapeDiv.appendChild(inputShape);
-            inputShapesTopRow.appendChild(inputShapeDiv);
-            inputShapesContainer.appendChild(inputShapesTopRow);
+        let topRow = document.createElement('div');
+        topRow.setAttribute("class", "row topRow");
+        for (var i = 0; i < Math.floor(shuffledArrLength/2); ++i) {
+            let newDiv = makeImgDiv(shuffledArr[i], divClass, imgClass, imgClickFunct);
+            topRow.appendChild(newDiv);
+            container.appendChild(topRow);
         }
 
         // Fill the bottom Row with the remaining half of the array elements.
-        let inputShapesBotRow = document.createElement('div');
-        inputShapesBotRow.setAttribute("class", "row");
-        for (var i = Math.floor(shuffledInputsLength/2); i < shuffledInputsLength; ++i) {
-            let inputShapeDiv = document.createElement('div');
-            inputShapeDiv.setAttribute("class", "inputShapeDiv");
-
-            let inputShape = document.createElement('img');
-            inputShape.setAttribute("class", "inputShape");
-            inputShape.setAttribute("src", shuffledInputs[i]);
-            inputShape.onclick = function(event) {
-                appendInput(event);
-            };
-
-            inputShapeDiv.appendChild(inputShape);
-            inputShapesBotRow.appendChild(inputShapeDiv);
-            inputShapesContainer.appendChild(inputShapesBotRow);
+        let botRow = document.createElement('div');
+        botRow.setAttribute("class", "row");
+        for (var i = Math.floor(shuffledArrLength/2); i < shuffledArrLength; ++i) {
+            let newDiv = makeImgDiv(shuffledArr[i], divClass, imgClass, imgClickFunct);
+            botRow.appendChild(newDiv);
+            container.appendChild(botRow);
         }
 
     } else {
         // Fill all elements in a single row.
-        let inputShapesRow = document.createElement('div');
-        inputShapesRow.setAttribute("class", "row");
-        for (var i = 0; i < shuffledInputsLength; ++i) {
-            let inputShapeDiv = document.createElement('div');
-            inputShapeDiv.setAttribute("class", "inputShapeDiv");
-
-            let inputShape = document.createElement('img');
-            inputShape.setAttribute("class", "inputShape");
-            inputShape.setAttribute("src", shuffledInputs[i]);
-            inputShape.onclick = function(event) {
-                appendInput(event);
-            };
-
-            inputShapeDiv.appendChild(inputShape);
-            inputShapesRow.appendChild(inputShapeDiv);
-            inputShapesContainer.appendChild(inputShapesRow);
+        let row = document.createElement('div');
+        row.setAttribute("class", "row");
+        for (var i = 0; i < shuffledArrLength; ++i) {
+            let newDiv = makeImgDiv(shuffledArr[i], divClass, imgClass, imgClickFunct);
+            row.appendChild(newDiv);
+            container.appendChild(row);
         }
     }
-
-    hideAllExcept('thirdContainerDiv');
 }
 
 function shuffle(array) {
@@ -260,12 +257,20 @@ function resetTraversedPathsDiv() {
     }
 }
 
+function resetShapeRelationsContainer() {
+    // Resets shapeRelationsContainer.
+    var shapeRelationsContainer = document.getElementById('shapeRelationsContainer');
+    while (shapeRelationsContainer.firstChild) {
+        shapeRelationsContainer.removeChild(shapeRelationsContainer.firstChild);
+    }
+}
+
 function updateStrikesAndCheckLose() {
     NUM_STRIKES += 1;
     document.getElementById('numStrikes').innerHTML = NUM_STRIKES;
 
-    // Show user the lose screen if NUM_STRIKES reaches 3.
-    if (NUM_STRIKES == 3) {
+    // Show user the lose screen if NUM_STRIKES reaches NUM_STRIKES_TO_LOSE.
+    if (NUM_STRIKES == NUM_STRIKES_TO_LOSE) {
         showLosePopup();
         return true;
     }
@@ -373,6 +378,11 @@ var duds = [
     './shapes/inputs/duds/blkt.png',
     './shapes/inputs/duds/blut.png',
     './shapes/inputs/duds/blkt_n_blut.png'];
+
+// Game level stats to alter.
+var NUM_STRIKES_TO_LOSE = 3;
+var SHOW_RELATIONS_MS = 5000;
+var CURR_LEVEL = 0;
 
 // May use to show user all their input history when they lose.
 var inputSequence = [];
