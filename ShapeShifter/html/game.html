@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +23,7 @@
                     <img id="objShape" alt="Objective Shape" />
                 </div>
             </div>
-            <button id="nextButton" onclick="loadShapeRelations()">Continue...</button>
+            <button id="nextButton" onclick="loadShapeRelations()">Continue</button>
         </div>
 
         <!--The shape relations container-->
@@ -32,26 +34,27 @@
 
         <!--User input container-->
    
-            <div id="thirdContainerDiv" class="containerDiv">
-                    <div class="hero">
-                <!--User in-game stats-->
-                <div id="userStatsContainer" class="containerDiv">
-                    <h3 class="userStats">Strikes: <span id="numStrikes"></span></h3>
-                    <h3 class="userStats">Entries: <span id="numEntries"></span></h3>
-                </div>
-                <div class="traversedPathsContainer">
-                    <div id="traversedPathsText">Traversed Paths:</div>
-                    <div id="traversedPathsDiv"></div>
-                </div>
-                <div class="pastInputContainer">
-                    <div id="pastInputText">Your Input:</div>
-                    <div id="pastInputDiv"></div>
-                </div>
-
-                <div id="inputShapesContainer" class="inputShapesContainer"></div>
-
-                </div>
+        <div id="thirdContainerDiv" class="containerDiv">
+                <div class="hero">
+            <!--User in-game stats-->
+            <div id="userStatsContainer" class="containerDiv">
+                <h3 class="userStats">Strikes: <span id="numStrikes"></span></h3>
+                <h3 class="userStats">Entries: <span id="numEntries"></span></h3>
             </div>
+            <div class="traversedPathsContainer">
+                <div id="traversedPathsText">Traversed Paths:</div>
+                <div id="traversedPathsDiv"></div>
+            </div>
+            <div class="pastInputContainer">
+                <div id="pastInputText">Your Input:</div>
+                <div id="pastInputDiv"></div>
+            </div>
+
+            <div id="inputShapesContainer" class="inputShapesContainer"></div>
+
+            </div>
+        </div>
+
 
         <!--Popup window for user interaction scenarios eg. winning, losing, striking, etc.-->
         <div id="popUpWindow" class="popUpModal">
@@ -68,7 +71,13 @@
             </div>
         </div>
 
+
+	<div id="bg">
+        <img src="back.jpg" alt="Geometric background, triangles">
+  </div>
+  
+
     </div>
-    <script src="../js/home.js"></script>
+    <script type="text/javascript" src="../js/game.js"></script>
 </body>
 </html>
