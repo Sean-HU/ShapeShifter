@@ -9,6 +9,7 @@ body {
     flex-wrap: wrap;
     width: 100vw;
     height: 100vh;
+    
 }
 
 .containerDiv {
@@ -57,9 +58,11 @@ body {
 }
 
 #nextButton {
-    position: absolute;
-    right: 15%;
-    top: 50%;
+    /* position: absolute; */
+    /* right: 15%; */
+    top: 15rem;
+    background: #54b5bc;
+
     font-size: 20px;
     padding: 10px;
     cursor: pointer;
@@ -260,4 +263,32 @@ body {
 .popUpButton:hover {
     color: white;
     background-color: black;
+}
+
+#bg {
+    position: fixed; 
+    top: -50%; 
+    left: -50%; 
+    width: 200%; 
+    height: 200%;
+    z-index: -2;
+  }
+  #bg img {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    margin: auto; 
+    min-width: 50%;
+    min-height: 50%;
+    z-index: -1;
+  }
+  
+ 
+  .hero{
+    width: 700px;
+    height: auto;
+    padding: 50px;
+    background: rgba(255,255,255,0.9)
 }
