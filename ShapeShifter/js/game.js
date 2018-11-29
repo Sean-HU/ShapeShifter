@@ -4,8 +4,6 @@ function loadShapes() {
     // var shuffledShapes = shuffle(availableShapes);
 
     // Preparing the Start Shape.
-    getLevel(CURR_LEVEL);
-    shuffle(states);
     let shape = availableShapes[0];
     var shapeName = shape.substring(shape.lastIndexOf('/')+1, shape.lastIndexOf("."));
     startShape = shapeName;
@@ -18,15 +16,14 @@ function loadShapes() {
     objShape = shapeName;
     document.getElementById('objShape').setAttribute('src', shape);
 
-    //CURR_LEVEL++;
+    CURR_LEVEL++;
 
     hideAllExcept('firstContainerDiv');
 }
 
 function loadShapeRelations() {
     // Display current level.
-    var level = CURR_LEVEL + 1;
-    document.getElementById('levelDisplay').innerHTML = "Level " + level;
+    document.getElementById('levelDisplay').innerHTML = "Level " + CURR_LEVEL;
 
     // Reset shapeRelationsContainer.
     resetShapeRelationsContainer();
@@ -57,7 +54,7 @@ function loadAvailableInputs() {
     var shuffledInputs = shuffle(availableShapes.concat(duds));
     var imgClickFunct = function(event) {
         appendInput(event);
-    };
+    }
 
     evenlyLoadElementsIntoContainer(shuffledInputs, "inputShapeDiv", "inputShape", imgClickFunct, "inputShapesContainer");
 
@@ -172,7 +169,7 @@ function validateInput(inputShapeSrc) {
 
     // Append the traversed paths (relations) if they are valid.
     for (var currShape of currShapes) {
-        var traversalSrc = './shapes' + CURR_LEVEL + '/traversals/' + currShape + '_t_' + inputShapeName + '.png';
+        var traversalSrc = './shapes/traversals/' + currShape + '_t_' + inputShapeName + '.png';
         if (shapeTraversals.includes(traversalSrc)) {
             // Means move is valid.
             validRelationExists = true;
@@ -270,6 +267,8 @@ function resetShapeRelationsContainer() {
 
 function updateStrikesAndCheckLose() {
     NUM_STRIKES += 1;
+    var strike = document.getElementById('numStrikes');
+    strike.setAttribute('style','color:red;')
     document.getElementById('numStrikes').innerHTML = NUM_STRIKES;
 
     // Show user the lose screen if NUM_STRIKES reaches NUM_STRIKES_TO_LOSE.
@@ -285,45 +284,27 @@ function updateStrikesAndCheckLose() {
 }
 
 function showWinPopup() {
-    if (CURR_LEVEL != 6) {
-        document.getElementById('popUpTitle').innerHTML = "Nice!";
-        document.getElementById("popUpMsg1").style.display = "none";
-        document.getElementById("popUpMsg2").style.display = "none";
+    document.getElementById('popUpTitle').innerHTML = "You Won!";
+    document.getElementById("popUpMsg1").style.display = "none";
+    document.getElementById("popUpMsg2").style.display = "none";
 
-        document.getElementById('popUpButton1').style.display = 'inline-block';
-        document.getElementById('popUpButton1').innerHTML = "Continue to next level!";
-        document.getElementById('popUpButton1').onclick = function() {
-            nextLevel();
-        }
-
-        document.getElementById('popUpButton2').style.display = 'inline-block';
-        document.getElementById('popUpButton2').innerHTML = "Back to Main Menu...";
-        document.getElementById('popUpButton2').onclick = function() {
-            window.location.href = "index.html";
-        }
-
-        document.getElementById('popUpWindow').style.display = 'flex';
+    document.getElementById('popUpButton1').style.display = 'inline-block';
+    document.getElementById('popUpButton1').innerHTML = "Continue to next level!";
+    document.getElementById('popUpButton1').onclick = function() {
+        nextLevel();
     }
-    else {
-        document.getElementById('popUpTitle').innerHTML = "You Won!";
-        document.getElementById("popUpMsg1").style.display = "none";
-        document.getElementById("popUpMsg2").style.display = "none";
 
-        document.getElementById('popUpButton1').style.display = 'inline-block';
-        document.getElementById('popUpButton1').innerHTML = "Back to Main Menu...";
-        document.getElementById('popUpButton1').onclick = function() {
-            window.location.href = "index.html";
-        };
-
-        document.getElementById('popUpButton2').style.display = 'none';
-
-        document.getElementById('popUpWindow').style.display = 'flex';
+    document.getElementById('popUpButton2').style.display = 'inline-block';
+    document.getElementById('popUpButton2').innerHTML = "Back to Main Menu...";
+    document.getElementById('popUpButton2').onclick = function() {
+        window.location.href = "index.html";
     }
+
+    document.getElementById('popUpWindow').style.display = 'flex';
 }
 
 function nextLevel() {
     // TODO: update the nextLevel by using a global variable currLevel and updating the input arrays.
-    CURR_LEVEL++;
     loadShapes();
 }
 
@@ -336,7 +317,7 @@ function showLosePopup() {
     document.getElementById('popUpButton1').innerHTML = "Back to Main Menu...";
     document.getElementById('popUpButton1').onclick = function() {
         window.location.href = "index.html";
-    };
+    }
 
     document.getElementById('popUpButton2').style.display = 'none';
 
@@ -372,254 +353,33 @@ function hideAllExcept(elementId) {
     }
 }
 
-function getLevel(level) {
-    //var availableShapes;
-    //var shapeRelations;
-    //var shapeTraversals;
-    var duds;
-    switch (level) {
-        case 0:
-            availableShapes = [
-                './shapes0/inputs/blus.png',
-                './shapes0/inputs/blkc.png',
-                './shapes0/inputs/blks.png',
-                './shapes0/inputs/bluc.png',
-                './shapes0/inputs/blkt.png',
-                './shapes0/inputs/blut.png'];
-                //'./shapes0/inputs/blkc_n_bluc.png',
-                //'./shapes0/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes0/relations/sprite.png',
-                './shapes0/relations/sprite2.png'];
-
-            shapeTraversals = [
-                './shapes0/traversals/blus_t_blkc.png',
-                './shapes0/traversals/blkc_t_blus.png'];
-
-            duds = [];
-            break;
-        case 1:
-            availableShapes = [
-                './shapes1/inputs/blus.png',
-                './shapes1/inputs/blks.png',
-                './shapes1/inputs/blkc.png',
-                './shapes1/inputs/bluc.png',
-                './shapes1/inputs/blkt.png',
-                './shapes1/inputs/blut.png'];
-                //'./shapes1/inputs/blkc_n_bluc.png',
-                //'./shapes1/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes1/relations/sprite.png',
-                './shapes1/relations/sprite2.png',
-                './shapes1/relations/sprite3.png',
-                './shapes1/relations/sprite4.png'];
-
-            shapeTraversals = [
-                './shapes1/traversals/blus_t_bluc.png',
-                './shapes1/traversals/bluc_t_blkc.png',
-                './shapes1/traversals/blks_t_blus.png',
-                './shapes1/traversals/blkc_t_blks.png'];
-
-            duds = [
-                './shapes1/inputs/duds/blkt.png',
-                './shapes1/inputs/duds/blut.png',
-                './shapes1/inputs/duds/blkt_n_blut.png'];
-            break;
-        case 2:
-            availableShapes = [
-                './shapes2/inputs/blus.png',
-                './shapes2/inputs/bluc.png',
-                './shapes2/inputs/blks.png',
-                './shapes2/inputs/blkc.png',
-                './shapes2/inputs/blkt.png',
-                './shapes2/inputs/blut.png'];
-                //'./shapes2/inputs/blkc_n_bluc.png',
-                //'./shapes2/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes2/relations/sprite.png',
-                './shapes2/relations/sprite2.png',
-                './shapes2/relations/sprite3.png',
-                './shapes2/relations/sprite4.png'];
-
-            shapeTraversals = [
-                './shapes2/traversals/blus_t_blks.png',
-                './shapes2/traversals/blus_t_blkc.png',
-                './shapes2/traversals/blks_t_blkc.png',
-                './shapes2/traversals/blkc_t_bluc.png',
-                './shapes2/traversals/bluc_t_blks.png'];
-
-            duds = [
-                './shapes2/inputs/duds/blkt.png',
-                './shapes2/inputs/duds/blut.png',
-                './shapes2/inputs/duds/blkt_n_blut.png'];
-            break;
-        case 3:
-            availableShapes = [
-                './shapes3/inputs/blkt.png',
-                './shapes3/inputs/blut.png',
-                './shapes3/inputs/blus.png',
-                './shapes3/inputs/blks.png',
-                './shapes3/inputs/blkc.png',
-                './shapes3/inputs/bluc.png'];
-               // './shapes3/inputs/blkt_n_blut.png'];
-            //'./shapes3/inputs/blks_n_blus.png' ARE THESE AVAILABLE SHAPES TOO?
-            //'./shapes3/inputs/blkc_n_bluc.png'
-
-            shapeRelations = [
-                './shapes3/relations/sprite.png',
-                './shapes3/relations/sprite2.png',
-                './shapes3/relations/sprite3.png',
-                './shapes3/relations/sprite4.png'];
-
-            shapeTraversals = [
-                './shapes3/traversals/blkt_t_blut.png',
-                './shapes3/traversals/blks_t_blkt.png',
-                './shapes3/traversals/blks_t_blkc.png',
-                './shapes3/traversals/blkc_t_blut.png',
-                './shapes3/traversals/blut_t_blks.png'];
-
-            duds = [
-                './shapes3/inputs/duds/blus.png',
-                './shapes3/inputs/duds/bluc.png'];
-            break;
-        case 4:
-            availableShapes = [
-                './shapes4/inputs/blks.png',
-                './shapes4/inputs/blkc.png',
-                './shapes4/inputs/blut.png',
-                './shapes4/inputs/blus.png',
-                './shapes4/inputs/blkt.png',
-                './shapes4/inputs/bluc.png',
-                './shapes4/inputs/blkt_n_blut.png',
-                './shapes4/inputs/blkc_n_bluc.png',
-                './shapes4/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes4/relations/sprite.png',
-                './shapes4/relations/sprite2.png',
-                './shapes4/relations/sprite3.png',
-                './shapes4/relations/sprite4.png',
-                './shapes4/relations/sprite5.png'];
-
-            shapeTraversals = [
-                './shapes4/traversals/blks_t_blkt.png',
-                './shapes4/traversals/blks_t_blut.png',
-                './shapes4/traversals/blut_t_blus.png',
-                './shapes4/traversals/blus_t_blkc.png',
-                './shapes4/traversals/blkt_t_blkc.png',
-                './shapes4/traversals/blkc_t_blut.png',
-                './shapes4/traversals/blks_t_blkt_n_blut.png'];
-
-            duds = [
-                './shapes4/inputs/duds/bluc.png',
-                './shapes4/inputs/duds/bluc_n_blkc.png'];
-            break;
-            /*
-        case 5:
-            availableShapes = [
-                './shapes/inputs/blkc.png',
-                './shapes/inputs/blks.png',
-                './shapes/inputs/blus.png',
-                './shapes/inputs/bluc.png',
-                './shapes/inputs/blkc_n_bluc.png',
-                './shapes/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes/relations/sprite.png',
-                './shapes/relations/sprite2.png',
-                './shapes/relations/sprite3.png',
-                './shapes/relations/sprite4.png'];
-
-            shapeTraversals = [
-                './shapes/traversals/blkc_t_blks.png',
-                './shapes/traversals/blkc_t_blus.png',
-                './shapes/traversals/blks_t_blkc.png',
-                './shapes/traversals/blkc_t_blks_n_blus.png',
-                './shapes/traversals/blks_t_blkc_n_bluc.png',
-                './shapes/traversals/bluc_t_blks_n_blus.png'];
-
-            duds = [
-                './shapes/inputs/duds/blkt.png',
-                './shapes/inputs/duds/blut.png',
-                './shapes/inputs/duds/blkt_n_blut.png'];
-                */
-        case 5:
-            availableShapes = [
-                './shapes5/inputs/blus.png',
-                './shapes5/inputs/blkt.png',
-                './shapes5/inputs/blks.png',
-                './shapes5/inputs/blut.png',
-                './shapes5/inputs/blkc.png',
-                './shapes5/inputs/bluc.png'];
-                //'./shapes5/inputs/blks_n_blus.png',
-                //'./shapes5/inputs/blkc_n_bluc.png',
-                //'./shapes5/inputs/blkt_n_blut.png'];
-
-            shapeRelations = [
-                './shapes5/relations/sprite.png',
-                './shapes5/relations/sprite2.png',
-                './shapes5/relations/sprite3.png',
-                './shapes5/relations/sprite4.png',
-                './shapes5/relations/sprite5.png'];
-
-            shapeTraversals = [
-                './shapes5/traversals/blus_t_blkc.png',
-                './shapes5/traversals/blkc_t_blut.png',
-                './shapes5/traversals/blkc_t_blkt.png',
-                './shapes5/traversals/blkc_t_blkt_n_blut.png',
-                './shapes5/traversals/blut_t_blus.png',
-                './shapes5/traversals/blkt_t_blus.png'];
-
-            duds = [];
-            break;
-        case 6:
-            availableShapes = [
-                './shapes6/inputs/blus.png',
-                './shapes6/inputs/bluc.png',
-                './shapes6/inputs/blks.png',
-                './shapes6/inputs/blut.png',
-                './shapes6/inputs/blkt.png',
-                './shapes6/inputs/blkc.png',
-                './shapes6/inputs/blkt_n_blut.png',
-                './shapes6/inputs/blkc_n_bluc.png',
-                './shapes6/inputs/blks_n_blus.png'];
-
-            shapeRelations = [
-                './shapes6/relations/sprite.png',
-                './shapes6/relations/sprite2.png',
-                './shapes6/relations/sprite3.png',
-                './shapes6/relations/sprite4.png',
-                './shapes6/relations/sprite5.png',
-                './shapes6/relations/sprite6.png'];
-
-            shapeTraversals = [
-                './shapes6/traversals/blus_t_blkt.png',
-                './shapes6/traversals/blks_t_bluc.png',
-                './shapes6/traversals/blkt_t_blks.png',
-                './shapes6/traversals/blkt_t_blut.png',
-                './shapes6/traversals/blkt_t_bluc.png',
-                './shapes6/traversals/blut_t_blus.png',
-                './shapes6/traversals/bluc_t_blus.png'];
-
-            duds = [];
-            break;
-    }
-}
-
-
 // The urls are respective to the html files.
-var states = [];
+var availableShapes = [
+    './shapes/inputs/blkc.png',
+    './shapes/inputs/blks.png',
+    './shapes/inputs/blus.png',
+    './shapes/inputs/bluc.png',
+    './shapes/inputs/blkc_n_bluc.png',
+    './shapes/inputs/blks_n_blus.png'];
 
-var availableShapes = [];
+var shapeRelations = [
+    './shapes/relations/sprite.png',
+    './shapes/relations/sprite2.png',
+    './shapes/relations/sprite3.png',
+    './shapes/relations/sprite4.png'];
 
-var shapeRelations = [];
+var shapeTraversals = [
+    './shapes/traversals/blkc_t_blks.png',
+    './shapes/traversals/blkc_t_blus.png',
+    './shapes/traversals/blks_t_blkc.png',
+    './shapes/traversals/blkc_t_blks_n_blus.png',
+    './shapes/traversals/blks_t_blkc_n_bluc.png',
+    './shapes/traversals/bluc_t_blks_n_blus.png'];
 
-var shapeTraversals = [];
-
-var duds = [];
+var duds = [
+    './shapes/inputs/duds/blkt.png',
+    './shapes/inputs/duds/blut.png',
+    './shapes/inputs/duds/blkt_n_blut.png'];
 
 // Game level stats to alter.
 var NUM_STRIKES_TO_LOSE = 3;
@@ -641,5 +401,5 @@ var startShape;
 var objShape;
 
 window.onload = function() {
-    loadShapes(CURR_LEVEL);
-};
+    loadShapes();
+}
