@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<title>Shape Shifter</title>
+ 	 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+<body>
+	<div class="hero">
+		<div class="container">
+			<h1 class="text-center">Shape Shifter</h1>
+		</div>
+		<div class="container">
+			<img class=" center-block img-fluid" id="logo" src="logo.png">
+		</div>
+		
+		<div class="container">
+			<div class="row">
+				<div class="container">
+					    <button type="button" id="playBtn" class="btn btn-primary play btn-block">Play</button>
+				</div>
+			</div>
+
+			<div class="row">
+					<div class="container">
+						<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">Instructions</button>
+					</div>
+			</div>
+		</div>
+	</div>
+
+  	  <!-- Modal -->
+	  <div class="modal fade" id="myModal" role="dialog">
+	    <div class="modal-dialog">
+	    
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Instructions</h4>
+	        </div>
+	        <div class="modal-body">
+	          <p>You will be shown shapes that are connected to other shapes. The aim of the game is to memorize what
+                  you saw and follow these connections from shape to shape, to find a valid path from one shape to another.
+                  If you click on a shape that is not connected to the current shape you're in, then you get a strike.
+                  If you choose a sequence of shapes that are correct, you win!</p>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+	      
+	    </div>
+	  </div>
+
+
+
+
+
+
+
+	<div id="bg">
+  		<img src="back.jpg" alt="Geometric background, triangles">
+	</div>
+	
+
+	
+	
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/menu.js"></script>
+</body>
+</html>
